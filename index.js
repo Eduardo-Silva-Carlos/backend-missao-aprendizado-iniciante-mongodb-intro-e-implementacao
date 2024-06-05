@@ -14,7 +14,7 @@ async function main() {
   console.log('Banco de dados conectado com sucesso!...')
 
   const db = client.db(dbName)
-  const dbName = db.collection('personagem')
+  const collection = db.collection('personagem')
 
   const app = express()
 
@@ -25,9 +25,11 @@ async function main() {
   const lista = ['Java', 'Kotlin', 'Android']
 
   // EndPoint Read All '[GET] /personagem'
-
-  app.get('/personagem', function (req, res) {
-    res.send(lista.filter(Boolean))
+  app.get('/personagem', async function (req, res) {
+  // Acessamos a lista de intens na collection do mongoDB
+    const itens = await collection.find().toArray()
+  // Enviamos a lista de intens como resultado
+    res.send(itens)
   })
 
   // EndPoint Read BY ID [GET]/personagem/:id
